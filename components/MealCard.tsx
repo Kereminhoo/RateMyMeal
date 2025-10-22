@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     margin: 10,
     overflow: "hidden",
+    
   },
   image: {
     width: "100%",
@@ -44,3 +45,7 @@ const styles = StyleSheet.create({
     color: "#ff9500",
   },
 });
+
+
+
+

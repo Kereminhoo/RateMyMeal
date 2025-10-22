@@ -1,25 +1,43 @@
-import { View, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, ScrollView } from "react-native";
 import Header from "../components/Header";
 import MealCard from "../components/MealCard";
+import AddMealForm from "../components/AddMealForm";
 
 export default function HomeScreen() {
+  const [meals, setMeals] = useState([
+    { name: "Iskender", rating: 4, image: require("../assets/images/meal1.jpg") },
+    { name: "Etliekmek", rating: 5, image: require("../assets/images/meal2.jpg") },
+  ]);
+
+  const handleAddMeal = (newMeal: { name: string; rating: number; image: any }) => {
+    setMeals((prevMeals) => [newMeal, ...prevMeals]);
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Header title="RateMyMeal" />
+      <AddMealForm onAddMeal={handleAddMeal} />
       <View style={styles.grid}>
-        <MealCard name="Iskender" rating={4} image={require("../assets/images/meal1.jpg")} />
-        <MealCard name="Etliekmek" rating={5} image={require("../assets/images/meal2.jpg")} />
+        {meals.map((meal, index) => (
+          <MealCard
+            key={index}
+            name={meal.name}
+            rating={meal.rating}
+            image={meal.image}
+          />
+        ))}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: "#fff",
-    paddingTop: 50,
     alignItems: "center",
+    paddingTop: 50,
   },
   grid: {
     flexDirection: "row",
@@ -27,3 +45,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+

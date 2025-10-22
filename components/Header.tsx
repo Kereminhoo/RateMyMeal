@@ -14,15 +14,22 @@ export default function Header({ title }: HeaderProps) {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "#FFB703",
     width: "100%",
     paddingVertical: 20,
     alignItems: "center",
-    marginBottom: 20,
+    justifyContent: "center",
+    backgroundColor: "#FFA500", 
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
   },
   title: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#fff",
+    letterSpacing: 1,
   },
 });
