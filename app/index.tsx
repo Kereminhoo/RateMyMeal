@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { View, StyleSheet, FlatList, Button } from "react-native";
-import { useRouter } from "expo-router"; // Indispensable pour naviguer
+import { View, StyleSheet, FlatList, Button, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 import MealCard from "../components/MealCard";
-// Note: On n'importe plus AddMealForm ici !
 
 export default function HomeScreen() {
   const router = useRouter(); 
@@ -14,8 +13,6 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Le Header est géré par _layout maintenant, plus besoin du composant Header ici */}
-      
       <View style={styles.buttonContainer}>
         <Button 
           title="+ Ajouter un plat" 
@@ -28,11 +25,21 @@ export default function HomeScreen() {
         data={meals}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <MealCard
-            name={item.name}
-            rating={item.rating}
-            image={item.image}
-          />
+        
+          <TouchableOpacity 
+            onPress={() => {
+              router.push({
+                pathname: "/detail",
+                params: { name: item.name, rating: item.rating }
+              });
+            }}
+          >
+            <MealCard
+              name={item.name}
+              rating={item.rating}
+              image={item.image}
+            />
+          </TouchableOpacity>
         )}
         contentContainerStyle={styles.listContent}
         numColumns={2}
