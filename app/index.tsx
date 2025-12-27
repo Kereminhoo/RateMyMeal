@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native"; 
 import Header from "../components/Header";
 import MealCard from "../components/MealCard";
 import AddMealForm from "../components/AddMealForm";
@@ -15,35 +15,40 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <Header title="RateMyMeal" />
       <AddMealForm onAddMeal={handleAddMeal} />
-      <View style={styles.grid}>
-        {meals.map((meal, index) => (
+      
+      <FlatList
+        data={meals}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
           <MealCard
-            key={index}
-            name={meal.name}
-            rating={meal.rating}
-            image={meal.image}
+            name={item.name}
+            rating={item.rating}
+            image={item.image}
           />
-        ))}
-      </View>
-    </ScrollView>
+        )}
+        contentContainerStyle={styles.listContent}
+        numColumns={2} // afficher en grille de 2 colonnes
+        columnWrapperStyle={styles.grid} 
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1, 
     backgroundColor: "#fff",
-    alignItems: "center",
     paddingTop: 50,
   },
+  listContent: {
+    alignItems: "center",
+    paddingBottom: 20,
+  },
   grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: "space-between", // pour espacer les elements dans la grille
+    paddingHorizontal: 10,
   },
 });
-
-
