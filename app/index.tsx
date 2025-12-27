@@ -1,24 +1,29 @@
 import React, { useState } from "react";
-import { View, StyleSheet, FlatList } from "react-native"; 
-import Header from "../components/Header";
+import { View, StyleSheet, FlatList, Button } from "react-native";
+import { useRouter } from "expo-router"; // Indispensable pour naviguer
 import MealCard from "../components/MealCard";
-import AddMealForm from "../components/AddMealForm";
+// Note: On n'importe plus AddMealForm ici !
 
 export default function HomeScreen() {
+  const router = useRouter(); 
+
   const [meals, setMeals] = useState([
     { name: "Iskender", rating: 4, image: require("../assets/images/meal1.jpg") },
     { name: "Etliekmek", rating: 5, image: require("../assets/images/meal2.jpg") },
   ]);
 
-  const handleAddMeal = (newMeal: { name: string; rating: number; image: any }) => {
-    setMeals((prevMeals) => [newMeal, ...prevMeals]);
-  };
-
   return (
     <View style={styles.container}>
-      <Header title="RateMyMeal" />
-      <AddMealForm onAddMeal={handleAddMeal} />
+      {/* Le Header est géré par _layout maintenant, plus besoin du composant Header ici */}
       
+      <View style={styles.buttonContainer}>
+        <Button 
+          title="+ Ajouter un plat" 
+          color="#FFA500"
+          onPress={() => router.push("/add")} 
+        />
+      </View>
+
       <FlatList
         data={meals}
         keyExtractor={(item, index) => index.toString()}
@@ -30,8 +35,8 @@ export default function HomeScreen() {
           />
         )}
         contentContainerStyle={styles.listContent}
-        numColumns={2} // afficher en grille de 2 colonnes
-        columnWrapperStyle={styles.grid} 
+        numColumns={2}
+        columnWrapperStyle={styles.grid}
       />
     </View>
   );
@@ -39,16 +44,20 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
+    flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 50,
+  },
+  buttonContainer: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
   },
   listContent: {
+    paddingVertical: 20,
     alignItems: "center",
-    paddingBottom: 20,
   },
   grid: {
-    justifyContent: "space-between", // pour espacer les elements dans la grille
+    justifyContent: "space-between",
     paddingHorizontal: 10,
   },
 });
