@@ -1,15 +1,23 @@
-import React, { useState } from "react";
-import { View, StyleSheet, FlatList, Button, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
+import React, { useState, useCallback } from "react";
+import { View, StyleSheet, FlatList, Button, TouchableOpacity, Text } from "react-native";
+import { useRouter, useFocusEffect } from "expo-router"; 
 import MealCard from "../components/MealCard";
+import { getMealsFromDB } from "../utils/database";
 
 export default function HomeScreen() {
   const router = useRouter(); 
+  const [meals, setMeals] = useState<any[]>([]);
 
-  const [meals, setMeals] = useState([
-    { name: "Iskender", rating: 4, image: require("../assets/images/meal1.jpg") },
-    { name: "Etliekmek", rating: 5, image: require("../assets/images/meal2.jpg") },
-  ]);
+  
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchMeals() {
+        const data = await getMealsFromDB();
+        setMeals(data);
+      }
+      fetchMeals();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -23,48 +31,40 @@ export default function HomeScreen() {
 
       <FlatList
         data={meals}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-        
           <TouchableOpacity 
             onPress={() => {
               router.push({
                 pathname: "/detail",
-                params: { name: item.name, rating: item.rating }
+                params: { 
+                  id: item.id, 
+                  name: item.name, 
+                  rating: item.rating 
+                }
               });
             }}
           >
+           
             <MealCard
               name={item.name}
               rating={item.rating}
-              image={item.image}
+              image={require("../assets/images/unknow.png")} 
             />
           </TouchableOpacity>
         )}
         contentContainerStyle={styles.listContent}
         numColumns={2}
         columnWrapperStyle={styles.grid}
+        ListEmptyComponent={<Text style={{marginTop: 50}}>Aucun plat enregistré.</Text>}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  buttonContainer: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-  },
-  listContent: {
-    paddingVertical: 20,
-    alignItems: "center",
-  },
-  grid: {
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
-  },
+  container: { flex: 1, backgroundColor: "#fff" },
+  buttonContainer: { padding: 15, borderBottomWidth: 1, borderBottomColor: "#eee" },
+  listContent: { paddingVertical: 20, alignItems: "center" },
+  grid: { justifyContent: "space-between", paddingHorizontal: 10 },
 });

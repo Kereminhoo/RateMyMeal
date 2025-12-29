@@ -9,18 +9,18 @@ export default function AddMealForm({ onAddMeal }: AddMealFormProps) {
   const [name, setName] = useState("");
   const [rating, setRating] = useState("");
 
-  const handleAdd = () => {
+const handleAdd = () => {
+   
     if (!name || !rating) return;
 
     const newMeal = {
-      name,
-      rating: Number(rating),
+      name: name,
+      rating: Number(rating), 
       image: require("../assets/images/unknow.png"),
     };
 
     onAddMeal(newMeal);
-    setName("");
-    setRating("");
+    
   };
 
   return (

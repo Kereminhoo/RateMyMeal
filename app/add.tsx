@@ -1,15 +1,32 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import AddMealForm from '../components/AddMealForm'; 
 import { useRouter } from 'expo-router';
+import { addMealToDB } from '../utils/database';
 
 export default function AddMealScreen() {
   const router = useRouter();
 
-  
-  const handleAdd = (meal: any) => {
-    console.log("Nouveau plat:", meal);
+  const handleAdd = async (meal: any) => {
     
-    router.back(); // Ferme la fenêtre et retourne à l'accueil
+    const nameToCheck = meal.name;
+    
+    
+    const ratingToCheck = meal.rating ? Number(meal.rating) : 0;
+    
+   
+    if (!nameToCheck || ratingToCheck === 0) {
+      Alert.alert("Erreur", "Le nom et une note valide sont obligatoires !");
+      return;
+    }
+
+    try {
+      
+      await addMealToDB(nameToCheck, ratingToCheck, "");
+      router.back();
+    } catch (e) {
+      console.error("Erreur lors de la sauvegarde :", e);
+      Alert.alert("Erreur", "Impossible de sauvegarder le plat.");
+    }
   };
 
   return (
