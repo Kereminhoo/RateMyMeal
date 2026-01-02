@@ -8,7 +8,6 @@ export default function HomeScreen() {
   const router = useRouter(); 
   const [meals, setMeals] = useState<any[]>([]);
 
-  
   useFocusEffect(
     useCallback(() => {
       async function fetchMeals() {
@@ -35,21 +34,23 @@ export default function HomeScreen() {
         renderItem={({ item }) => (
           <TouchableOpacity 
             onPress={() => {
+              
               router.push({
                 pathname: "/detail",
                 params: { 
                   id: item.id, 
                   name: item.name, 
-                  rating: item.rating 
+                  rating: item.rating,
+                  image: item.image 
                 }
               });
             }}
           >
-           
+            
             <MealCard
               name={item.name}
               rating={item.rating}
-              image={require("../assets/images/unknow.png")} 
+              image={item.image} 
             />
           </TouchableOpacity>
         )}

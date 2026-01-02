@@ -8,20 +8,17 @@ export default function AddMealScreen() {
 
   const handleAdd = async (meal: any) => {
     
-    const nameToCheck = meal.name;
-    
-    
-    const ratingToCheck = meal.rating ? Number(meal.rating) : 0;
-    
-   
-    if (!nameToCheck || ratingToCheck === 0) {
-      Alert.alert("Erreur", "Le nom et une note valide sont obligatoires !");
+    if (!meal.name || !meal.rating) {
+      Alert.alert("Erreur", "Le nom et la note sont obligatoires !");
       return;
     }
 
     try {
       
-      await addMealToDB(nameToCheck, ratingToCheck, "");
+      const imageToSave = meal.image || ""; 
+
+      await addMealToDB(meal.name, Number(meal.rating), imageToSave);
+      
       router.back();
     } catch (e) {
       console.error("Erreur lors de la sauvegarde :", e);
